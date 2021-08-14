@@ -26,12 +26,27 @@ function getLegalMoves(arrayOfAllMapSquares, characterLocationObject, characterM
     })
     return arrayOfSquaresThisCharacterCanMoveTo;
 }
+function moveButtonClick(){
+    console.log("You clicked the move button");
+}
+function attackButtonClick(){
+    console.log("You clicked the attack button");
+}
+function renderInventory(){
+    let inventoryHtml = "";
+    player.inventory.forEach(function(inventoryItem){
+        inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button>";
+    })
+}
 
 var player = {
     location: {
         x: 3,
         y: 1
     },
+    inventory: [
+        nineMil,knife
+    ],
     PunchGood: 25+statValueRoller(),
     ShootGood: 25+statValueRoller(),
     Toughness: 25+statValueRoller(),
@@ -58,6 +73,11 @@ console.log(player.Move);
 console.log(player.meleeDamageBonus);
 
 var nineMil = {
+    name: "9mm Pistol",
+    info(){
+        //code to put item info in log-text-area for players to read
+    },
+    isWeapon: true,
     magSize: 12,
     damage (){
         let crit = 0;
@@ -70,6 +90,11 @@ var nineMil = {
     multiAttack: 3
 }
 var knife = {
+    name: "Knife",
+    isWeapon: true,
+    info (){
+        //code to put item info in log-text-area for players to read
+    },
     damage(characterPunchGoodBonus){
         let crit = 0;
         let roll = Math.floor(Math.random()*10)
@@ -80,3 +105,10 @@ var knife = {
         return characterPunchGoodBonus + roll + crit;
     }
 }
+
+//Listeners
+var attackButton = document.getElementById("attackButton");
+var moveButton = document.getElementById("moveButton");
+
+moveButton.addEventListener("click", moveButtonClick);
+attackButton.addEventListener("click", attackButtonClick);

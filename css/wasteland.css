@@ -8,6 +8,14 @@ body{
     width: 36rem;
     height: 36rem;
 }
+#divThatGetsInventoryToTheLeftOfTheMap{
+    display: flex;
+
+}
+#inventory{
+    width: 10rem;
+    height: 36rem;
+}
 .mapSquare{
     /*box-sizing: border-box;*/
     width: 3rem;
