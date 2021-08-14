@@ -29,8 +29,15 @@ function getLegalMoves(arrayOfAllMapSquares, characterLocationObject, characterM
 function moveButtonClick(){
     console.log("You clicked the move button");
 }
+function getTarget(){
+
+}
 function attackButtonClick(){
     console.log("You clicked the attack button");
+    let target = getTarget();
+    if(attackTypeSelection.value === "Ranged"){
+
+    }
 }
 function renderInventory(){
     let inventoryHtml = "";
@@ -40,6 +47,7 @@ function renderInventory(){
 }
 
 var player = {
+    name: "You",
     location: {
         x: 3,
         y: 1
@@ -67,6 +75,39 @@ var player = {
         return this. meleeDamageBonus = Math.floor(player.PunchGood/10);
     }
 }
+
+var scavenger = {
+    name: "Scavenger",
+    location: {
+        x: 3,
+        y: 1
+    },
+    inventory: [
+        nineMil,knife
+    ],
+    PunchGood: 25+statValueRoller(),
+    ShootGood: 25+statValueRoller(),
+    Toughness: 25+statValueRoller(),
+    Agility: 25+statValueRoller(),
+    //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
+    //https://stackoverflow.com/questions/4616202/self-references-in-object-literals-initializers
+    get Move() { delete this.Move;
+        return this.Move = Math.floor(player.Agility/10 * 2);
+    },
+    get HP(){ delete this.HP;
+        return this. HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
+    },
+    get currentHP(){ delete this.currentHP;
+        return this.currentHP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
+    },
+    get meleeDamageBonus(){
+        delete this.meleeDamageBonus;
+        return this. meleeDamageBonus = Math.floor(player.PunchGood/10);
+    }
+}
+
+var charactersArray = [player,scavenger];
+
 console.log(player.HP);
 console.log(player.currentHP);
 console.log(player.Move);
@@ -109,6 +150,7 @@ var knife = {
 //Listeners
 var attackButton = document.getElementById("attackButton");
 var moveButton = document.getElementById("moveButton");
+var attackTypeSelection = document.getElementById("attack-type-selection");
 
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
