@@ -20,14 +20,37 @@ function getLegalMoves(arrayOfAllMapSquares, characterLocationObject, characterM
     //this will get way more complicated with walls and difficult terrain but for now it's fine
     let arrayOfSquaresThisCharacterCanMoveTo = [];
     arrayOfAllMapSquares.forEach(function (specificMapSquare){
-        if(getDistance(characterLocationObject, specificMapSquare) <= characterMoveStat){
+        if(getDistance(characterLocationObject, specificMapSquare) <= characterMoveStat && getDistance(characterLocationObject, specificMapSquare) !== 0){
             arrayOfSquaresThisCharacterCanMoveTo.push(specificMapSquare);
         }
     })
     return arrayOfSquaresThisCharacterCanMoveTo;
 }
+
+function activateMoveButton(arrayOfSquaresYouCanMoveTo){
+    arrayOfSquaresYouCanMoveTo.forEach(function (square){
+        document.querySelector("#button" + square.x + "-" + square.y +"").style.setProperty('display','inline');
+    });
+}
 function moveButtonClick(){
     console.log("You clicked the move button");
+    activateMoveButton(getLegalMoves(allSquares, player.location, player.Move));
+}
+function moveHereClick(x, y){
+   if (confirm('Are you sure you wish to move here?')){
+       player.location = {
+           x: x,
+           y: y
+       }
+       hideMoveHere();
+       textLog.value += '\nYou have moved to ' + player.location.x + ', ' + player.location.y + '.';
+       //renderLocation();
+   }
+}
+function hideMoveHere(){
+    allSquares.forEach(function (square){
+        document.querySelector("#button" + square.x + "-" + square.y +"").style.setProperty('display','none');
+    });
 }
 function getTarget(){
 
@@ -49,7 +72,7 @@ function renderInventory(){
 var player = {
     name: "You",
     location: {
-        x: 3,
+        x: 1,
         y: 1
     },
     inventory: [
@@ -65,10 +88,10 @@ var player = {
         return this.Move = Math.floor(player.Agility/10 * 2);
         },
     get HP(){ delete this.HP;
-        return this. HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
+        return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
         },
     get currentHP(){ delete this.currentHP;
-        return this.currentHP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
+        return this.currentHP = this.HP;
     },
     get meleeDamageBonus(){
         delete this.meleeDamageBonus;
@@ -95,10 +118,10 @@ var scavenger = {
         return this.Move = Math.floor(player.Agility/10 * 2);
     },
     get HP(){ delete this.HP;
-        return this. HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
+        return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
     },
     get currentHP(){ delete this.currentHP;
-        return this.currentHP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
+        return this.currentHP = this.HP;
     },
     get meleeDamageBonus(){
         delete this.meleeDamageBonus;
@@ -146,11 +169,34 @@ var knife = {
         return characterPunchGoodBonus + roll + crit;
     }
 }
+function createTwelveByTwelveArray(){
+    var x = 1;
+    var y = 1;
+    var twelveByTwelve = [];
+    while(y < 13){
+        twelveByTwelve.push({
+            x: x,
+            y: y
+        });
+        x++;
+        if (x === 13){
+            x=1;
+            y++;
+        }
+    } return twelveByTwelve;
+}
+
+var allSquares = createTwelveByTwelveArray();
+    // {name: '1-1', x:1, y:1},
+    // {name: '2-1', x:2, y:1},
+    // {name: '3-1', x:3, y:1},
+    // {name: '4-1', x:4, y:1}
 
 //Listeners
 var attackButton = document.getElementById("attackButton");
 var moveButton = document.getElementById("moveButton");
 var attackTypeSelection = document.getElementById("attack-type-selection");
+var textLog = document.getElementById('gameLog')
 
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
