@@ -43,10 +43,14 @@ function moveHereClick(x, y){
            y: y
        }
        hideMoveHere();
+       document.getElementById('moveButton').setAttribute('disabled', 'true');
        textLog.value += '\nYou have moved to ' + player.location.x + ', ' + player.location.y + '.';
        //renderLocation()
    }
 }
+
+//alternate to moving, you can take aim and get +10 to your aim stat. Will add function later
+
 function hideMoveHere(){
     allSquares.forEach(function (square){
         document.querySelector("#button" + square.x + "-" + square.y +"").style.setProperty('display','none');
@@ -76,7 +80,7 @@ var player = {
         y: 1
     },
     inventory: [
-        nineMil,knife
+        nineMil,knife,
     ],
     PunchGood: 25+statValueRoller(),
     ShootGood: 25+statValueRoller(),
@@ -85,7 +89,7 @@ var player = {
     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
     //https://stackoverflow.com/questions/4616202/self-references-in-object-literals-initializers
     get Move() { delete this.Move;
-        return this.Move = Math.floor(player.Agility/10 * 2);
+        return this.Move = Math.floor(player.Agility/10);
         },
     get HP(){ delete this.HP;
         return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
@@ -151,6 +155,7 @@ var nineMil = {
         }
         return 1 + roll + crit;
     },
+    ammoLeftInMag: Math.floor(Math.random()*12),
     multiAttack: 3
 }
 var knife = {
