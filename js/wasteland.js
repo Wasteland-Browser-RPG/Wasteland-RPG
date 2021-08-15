@@ -44,7 +44,7 @@ function moveHereClick(x, y){
        }
        hideMoveHere();
        textLog.value += '\nYou have moved to ' + player.location.x + ', ' + player.location.y + '.';
-       //renderLocation();
+       //renderLocation()
    }
 }
 function hideMoveHere(){
