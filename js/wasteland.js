@@ -34,6 +34,7 @@ function activateMoveButton(arrayOfSquaresYouCanMoveTo){
 }
 function moveButtonClick(){
     console.log("You clicked the move button");
+
     activateMoveButton(getLegalMoves(allSquares, player.location, player.Move));
 }
 function moveHereClick(x, y){
@@ -43,7 +44,7 @@ function moveHereClick(x, y){
            y: y
        }
        hideMoveHere();
-       document.getElementById('moveButton').setAttribute('disabled', 'true');
+       //document.getElementById('moveButton').setAttribute('disabled', 'true');
        textLog.value += '\nYou have moved to ' + player.location.x + ', ' + player.location.y + '.';
        //renderLocation()
    }
