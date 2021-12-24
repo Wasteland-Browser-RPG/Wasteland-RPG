@@ -81,7 +81,7 @@ var player = {
         y: 1
     },
     inventory: [
-        nineMil,knife,
+        nineMil,knife
     ],
     PunchGood: 25+statValueRoller(),
     ShootGood: 25+statValueRoller(),
@@ -147,6 +147,7 @@ var nineMil = {
         //code to put item info in log-text-area for players to read
     },
     isWeapon: true,
+    ranged: true,
     magSize: 12,
     damage (){
         let crit = 0;
@@ -162,6 +163,7 @@ var nineMil = {
 var knife = {
     name: "Knife",
     isWeapon: true,
+    ranged: false,
     info (){
         //code to put item info in log-text-area for players to read
     },
@@ -192,6 +194,14 @@ function createTwelveByTwelveArray(){
     } return twelveByTwelve;
 }
 
+function attackSelection(){
+    if(attackTypeSelection==="melee"){
+        aimButton.disabled = true;
+    }else{
+        aimButton.disabled = false;
+    }
+}
+
 var allSquares = createTwelveByTwelveArray();
     // {name: '1-1', x:1, y:1},
     // {name: '2-1', x:2, y:1},
@@ -202,7 +212,9 @@ var allSquares = createTwelveByTwelveArray();
 var attackButton = document.getElementById("attackButton");
 var moveButton = document.getElementById("moveButton");
 var attackTypeSelection = document.getElementById("attack-type-selection");
-var textLog = document.getElementById('gameLog')
+var textLog = document.getElementById('gameLog');
+var aimButton = document.getElementById('aimButton');
+
 
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
