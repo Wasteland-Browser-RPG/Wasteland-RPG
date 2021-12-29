@@ -14,12 +14,16 @@
 			<button id="moveButton">Move</button>
 			<button id="moveCancelButton">Cancel Move</button>
 			<button id="moveConfirmButton">Confirm Move</button>
+			<button id="aimButton">Aim</button>
 			<button id="attackButton">Attack</button>
-			<select id="attack-type-selection">
+			<select id="attack-type-selection" onselect="attackSelection()">
 				<option>Melee</option>
 				<option>Ranged</option>
 			</select>
+			<button id="clearActions">Clear Actions</button>
+			<button id="confirmActions">Confirm Actions</button>
 		</div>
+		<div id="action-queue"></div>
 		<div id="textLog">
 			<textarea id="gameLog" rows="9" cols="50">Hi, welcome to Wasteland.</textarea>
 		</div>
@@ -188,5 +192,6 @@
 	</div>
 
 	<script src="js/wasteland.js"></script>
+	<script src="js/battleSim.js"></script>
 </body>
 </html>

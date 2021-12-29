@@ -1,3 +1,39 @@
+var nineMil = {
+    name: "9mm Pistol",
+    info(){
+        //code to put item info in log-text-area for players to read
+    },
+    isWeapon: true,
+    ranged: true,
+    magSize: 12,
+    damage (){
+        let crit = 0;
+        let roll = Math.floor(Math.random()*10);
+        if(roll ===10){
+            crit = Math.floor(Math.random()*6);
+        }
+        return 1 + roll + crit;
+    },
+    ammoLeftInMag: Math.floor(Math.random()*12),
+    multiAttack: 3
+}
+var knife = {
+    name: "Knife",
+    isWeapon: true,
+    ranged: false,
+    info (){
+        //code to put item info in log-text-area for players to read
+    },
+    damage(characterPunchGoodBonus){
+        let crit = 0;
+        let roll = Math.floor(Math.random()*10)
+        if(roll ===10){
+            crit = Math.floor(Math.random()*6);
+            //TODO log damage and when there's a crit. Maybe that can go with the call?
+        }
+        return characterPunchGoodBonus + roll + crit;
+    }
+}
 function statValueRoller(){
     let dTenOne = Math.ceil(Math.random()*10);
     let dTenTwo = Math.ceil(Math.random()*10);
@@ -81,7 +117,7 @@ var player = {
         y: 1
     },
     inventory: [
-        nineMil,knife,
+        nineMil,knife
     ],
     PunchGood: 25+statValueRoller(),
     ShootGood: 25+statValueRoller(),
@@ -141,40 +177,7 @@ console.log(player.currentHP);
 console.log(player.Move);
 console.log(player.meleeDamageBonus);
 
-var nineMil = {
-    name: "9mm Pistol",
-    info(){
-        //code to put item info in log-text-area for players to read
-    },
-    isWeapon: true,
-    magSize: 12,
-    damage (){
-        let crit = 0;
-        let roll = Math.floor(Math.random()*10)
-        if(roll ===10){
-            crit = Math.floor(Math.random()*6)
-        }
-        return 1 + roll + crit;
-    },
-    ammoLeftInMag: Math.floor(Math.random()*12),
-    multiAttack: 3
-}
-var knife = {
-    name: "Knife",
-    isWeapon: true,
-    info (){
-        //code to put item info in log-text-area for players to read
-    },
-    damage(characterPunchGoodBonus){
-        let crit = 0;
-        let roll = Math.floor(Math.random()*10)
-        if(roll ===10){
-            crit = Math.floor(Math.random()*6);
-            //TODO log damage and when there's a crit. Maybe that can go with the call?
-        }
-        return characterPunchGoodBonus + roll + crit;
-    }
-}
+
 function createTwelveByTwelveArray(){
     var x = 1;
     var y = 1;
@@ -192,6 +195,17 @@ function createTwelveByTwelveArray(){
     } return twelveByTwelve;
 }
 
+function attackSelection(){
+    if(attackTypeSelection.value ==="Melee"){
+        aimButton.disabled = true;
+        if(playerQueuedActions[0]==="Aim" || playerQueuedActions[1]==="Aim"){
+            clearActions();
+        }
+    }else{
+        aimButton.disabled = false;
+    }
+}
+
 var allSquares = createTwelveByTwelveArray();
     // {name: '1-1', x:1, y:1},
     // {name: '2-1', x:2, y:1},
@@ -202,7 +216,11 @@ var allSquares = createTwelveByTwelveArray();
 var attackButton = document.getElementById("attackButton");
 var moveButton = document.getElementById("moveButton");
 var attackTypeSelection = document.getElementById("attack-type-selection");
-var textLog = document.getElementById('gameLog')
+var textLog = document.getElementById('gameLog');
+var aimButton = document.getElementById('aimButton');
+var clearActionsButton = document.getElementById("clearActions");
+var confirmActionsButton = document.getElementById("confirmActions");
+
 
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
