@@ -16,6 +16,9 @@ body{
     width: 10rem;
     height: 36rem;
 }
+#action-queue{
+    color: white;
+}
 .mapSquare{
     box-sizing: border-box;
     width: 3rem;
