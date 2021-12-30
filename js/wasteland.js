@@ -11,6 +11,7 @@ var nineMil = {
         let roll = Math.floor(Math.random()*10);
         if(roll ===10){
             crit = Math.floor(Math.random()*6);
+            textLog.value += "\nA critical hit!";
         }
         return 1 + roll + crit;
     },
@@ -30,6 +31,7 @@ var knife = {
         if(roll ===10){
             crit = Math.floor(Math.random()*6);
             //TODO log damage and when there's a crit. Maybe that can go with the call?
+            textLog.value += "\nA critical hit!";
         }
         return characterPunchGoodBonus + roll + crit;
     }
@@ -119,8 +121,8 @@ var player = {
     inventory: [
         nineMil,knife
     ],
-    PunchGood: 25+statValueRoller(),
-    ShootGood: 25+statValueRoller(),
+    punchGood: 25+statValueRoller(),
+    shootGood: 25+statValueRoller(),
     Toughness: 25+statValueRoller(),
     Agility: 25+statValueRoller(),
     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
@@ -136,7 +138,7 @@ var player = {
     },
     get meleeDamageBonus(){
         delete this.meleeDamageBonus;
-        return this. meleeDamageBonus = Math.floor(player.PunchGood/10);
+        return this. meleeDamageBonus = Math.floor(player.punchGood/10);
     }
 }
 
@@ -149,8 +151,8 @@ var scavenger = {
     inventory: [
         nineMil,knife
     ],
-    PunchGood: 25+statValueRoller(),
-    ShootGood: 25+statValueRoller(),
+    punchGood: 25+statValueRoller(),
+    shootGood: 25+statValueRoller(),
     Toughness: 25+statValueRoller(),
     Agility: 25+statValueRoller(),
     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
@@ -166,7 +168,7 @@ var scavenger = {
     },
     get meleeDamageBonus(){
         delete this.meleeDamageBonus;
-        return this. meleeDamageBonus = Math.floor(player.PunchGood/10);
+        return this. meleeDamageBonus = Math.floor(player.punchGood/10);
     }
 }
 

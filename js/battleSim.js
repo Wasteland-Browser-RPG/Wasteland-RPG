@@ -1,4 +1,4 @@
-textLog.value += '\nAs you are scavenging in a delapidated corner store a hostile scavenger bursts in, sees you and attacks.';
+textLog.value += '\nAs you are scavenging in a dilapidated corner store a hostile scavenger bursts in, sees you and attacks.';
 
 if (player.currentHP>0 && scavenger.currentHP >0){
     textLog.value += "\nYou have 2 actions, what will you do?";
@@ -43,16 +43,45 @@ function confirmActions(){
     } else{
         aiming = false;
     }
-
-    if (aiming){
     //    in this case, currently, the only other action should be a ranged attack but we will still check
-        playerQueuedActions.forEach(function (action){
-           if (action=="Ranged Attack"){
-               rangedAttack(player, scavenger, aiming);
-           }
-        });
-    }
+    playerQueuedActions.forEach(function (action){
+       if (action=="Ranged Attack"){
+           rangedAttack(player, scavenger, aiming);
+       }
+        if (action=="Melee Attack"){
+            //TODO: use meeleeAttack Function
+            meleeAttack(player, scavenger, aiming);
+        }
+    });
+
+    enemyTurn();
 }
+
+function enemyTurn(){
+//    Todo: Write enemy turn
+
+}
+
+function meleeAttack(attacker, target){
+    let roll = Math.floor(Math.random() * 100);
+    textLog.value += "\nYou roll " + roll + " to hit.";
+    if ((attacker.punchGood) >= roll){
+        let damage = attacker.inventory[1].damage(attacker.meleeDamageBonus);
+        textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
+        target.currentHP -=damage;
+        if(target.currentHP < 1){
+            textLog.value +="\n"+target.name+" is deceased...";
+            clearActions();
+            return;
+        } else {
+            textLog.value +="\n"+target.name+" is still standing after your attack."
+        }
+    }else{
+        textLog.value += "\n"+target.name+ " avoids your attack.";
+    }
+    clearActions();
+}
+
 function rangedAttack(attacker, target, aiming){
     let bonus = 0;
     if(aiming){
@@ -62,7 +91,7 @@ function rangedAttack(attacker, target, aiming){
     if(attacker.inventory[0].ammoLeftInMag > 0) {
         let roll = Math.floor(Math.random() * 100);
         textLog.value += "\nYou roll " + roll + " to hit.";
-        if ((attacker.ShootGood + bonus) >= roll) {
+        if ((attacker.shootGood + bonus) >= roll) {
             //    might want to incorporate a dodging mechanic later
             let damage = attacker.inventory[0].damage();
             textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
@@ -70,6 +99,8 @@ function rangedAttack(attacker, target, aiming){
             target.currentHP -=damage;
             if(target.currentHP < 1){
                 textLog.value +="\n"+target.name+" is deceased...";
+                clearActions();
+                return;
             } else {
                 textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
             }
