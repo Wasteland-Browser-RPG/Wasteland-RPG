@@ -59,7 +59,35 @@ function confirmActions(){
 
 function enemyTurn(){
 //    Todo: Write enemy turn
+//    let's randomize it so it's not the same thing every time.
 
+    let roll = Math.floor(Math.random() * 3);
+//    possibilities at this point are:
+
+//    Todo: add reload action
+
+//    aim and shoot
+    if(roll === 1){
+      if(scavenger.inventory[0].ammoLeftInMag < 1){
+          enemyTurn();
+      } else{
+          rangedAttack(scavenger,player,true);
+      }
+    }
+//    shoot twice
+    if(roll === 2){
+        if(scavenger.inventory[0].ammoLeftInMag < 1){
+            enemyTurn();
+        }{
+            rangedAttack(scavenger,player,false);
+            rangedAttack(scavenger,player,false);
+        }
+    }
+//    melee twice
+    if(roll === 3){
+        meleeAttack(scavenger,player);
+        meleeAttack(scavenger,player);
+    }
 }
 
 function meleeAttack(attacker, target){
@@ -72,6 +100,7 @@ function meleeAttack(attacker, target){
         if(target.currentHP < 1){
             textLog.value +="\n"+target.name+" is deceased...";
             clearActions();
+            //TODO: Handle end of combat. Is it looting time? Are there additional foes?
             return;
         } else {
             textLog.value +="\n"+target.name+" is still standing after your attack."
@@ -100,12 +129,13 @@ function rangedAttack(attacker, target, aiming){
             if(target.currentHP < 1){
                 textLog.value +="\n"+target.name+" is deceased...";
                 clearActions();
+                //TODO: Handle end of combat. Is it looting time? Are there additional foes?
                 return;
             } else {
                 textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
             }
         }else{
-            textLog.value += "\nYou missed. You should aim more carefully.";
+            textLog.value += "\n"+ attacker.name+" missed. They should aim more carefully.";
         }
         clearActions();
     } else{

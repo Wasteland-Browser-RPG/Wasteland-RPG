@@ -95,9 +95,11 @@ function hideMoveHere(){
         document.querySelector("#button" + square.x + "-" + square.y +"").style.setProperty('display','none');
     });
 }
+
 function getTarget(){
 
 }
+
 function attackButtonClick(){
     console.log("You clicked the attack button");
     let target = getTarget();
@@ -105,6 +107,7 @@ function attackButtonClick(){
 
     }
 }
+
 function renderInventory(){
     let inventoryHtml = "";
     player.inventory.forEach(function(inventoryItem){
