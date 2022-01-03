@@ -101,18 +101,18 @@ function getTarget(){
 }
 
 function attackButtonClick(){
-    console.log("You clicked the attack button");
     let target = getTarget();
-    if(attackTypeSelection.value === "Ranged"){
-
-    }
+    // if(attackTypeSelection.value === "Ranged"){
+    //
+    // }
 }
 
 function renderInventory(){
     let inventoryHtml = "";
     player.inventory.forEach(function(inventoryItem){
-        inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button>";
-    })
+        inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button><br>";
+    });
+    return inventoryHtml;
 }
 
 var player = {
@@ -225,7 +225,9 @@ var textLog = document.getElementById('gameLog');
 var aimButton = document.getElementById('aimButton');
 var clearActionsButton = document.getElementById("clearActions");
 var confirmActionsButton = document.getElementById("confirmActions");
+var inventoryDiv = document.getElementById('inventory');
 
 
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
+inventoryDiv.innerHTML= renderInventory();
