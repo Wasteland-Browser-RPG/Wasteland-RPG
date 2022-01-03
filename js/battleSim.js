@@ -53,8 +53,9 @@ function confirmActions(){
             meleeAttack(player, scavenger, aiming);
         }
     });
-
-    enemyTurn();
+    if(scavenger.currentHP > 0){
+        enemyTurn();
+    }
 }
 
 function enemyTurn(){
@@ -62,39 +63,47 @@ function enemyTurn(){
 //    let's randomize it so it's not the same thing every time.
 
     let roll = Math.floor(Math.random() * 3);
+    console.log(roll);
 //    possibilities at this point are:
 
 //    Todo: add reload action
 
 //    aim and shoot
-    if(roll === 1){
+    if(roll === 0){
       if(scavenger.inventory[0].ammoLeftInMag < 1){
-          enemyTurn();
+          roll = 2;
       } else{
           rangedAttack(scavenger,player,true);
       }
     }
 //    shoot twice
-    if(roll === 2){
+    if(roll === 1){
         if(scavenger.inventory[0].ammoLeftInMag < 1){
-            enemyTurn();
-        }{
+            roll =2;
+        }else{
             rangedAttack(scavenger,player,false);
             rangedAttack(scavenger,player,false);
         }
     }
 //    melee twice
-    if(roll === 3){
+    if(roll === 2){
         meleeAttack(scavenger,player);
         meleeAttack(scavenger,player);
     }
 }
 
 function meleeAttack(attacker, target){
+    if(target.currentHP <1){
+        clearActions();
+        return;
+    }
     let roll = Math.floor(Math.random() * 100);
-    textLog.value += "\nYou roll " + roll + " to hit.";
+    textLog.value += "\n"+ attacker.name +" roll " + roll + " to hit.";
     if ((attacker.punchGood) >= roll){
-        let damage = attacker.inventory[1].damage(attacker.meleeDamageBonus);
+        let damage = attacker.inventory[1].damage(attacker.meleeDamageBonus)- Math.floor(target.Toughness/10);
+        if(damage < 0){
+            damage= 0;
+        }
         textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
         target.currentHP -=damage;
         if(target.currentHP < 1){
@@ -112,6 +121,10 @@ function meleeAttack(attacker, target){
 }
 
 function rangedAttack(attacker, target, aiming){
+    if(target.currentHP < 1){
+        clearActions();
+        return;
+    }
     let bonus = 0;
     if(aiming){
         bonus = 10;
@@ -119,10 +132,13 @@ function rangedAttack(attacker, target, aiming){
     console.log(attacker.inventory[0].ammoLeftInMag);
     if(attacker.inventory[0].ammoLeftInMag > 0) {
         let roll = Math.floor(Math.random() * 100);
-        textLog.value += "\nYou roll " + roll + " to hit.";
+        textLog.value += "\n" +attacker.name + " roll " + roll + " to hit.";
         if ((attacker.shootGood + bonus) >= roll) {
             //    might want to incorporate a dodging mechanic later
-            let damage = attacker.inventory[0].damage();
+            let damage = attacker.inventory[0].damage()- Math.floor(target.Toughness/10);
+            if(damage < 0){
+                damage= 0;
+            }
             textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
             attacker.inventory[0].ammoLeftInMag--;
             target.currentHP -=damage;
