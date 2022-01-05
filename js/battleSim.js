@@ -47,6 +47,11 @@ function confirmActions(){
     playerQueuedActions.forEach(function (action){
        if (action=="Ranged Attack"){
            rangedAttack(player, scavenger, aiming);
+           if(scavenger.currentHP <1){
+               textLog.value+="\nWell, the fighting is over. You might as well check the body and scavenge around a bit before moving on."
+               //Call to function for what happens after defeating foe
+               return;
+           }
        }
         if (action=="Melee Attack"){
             //TODO: use meeleeAttack Function
@@ -74,6 +79,11 @@ function enemyTurn(){
           roll = 2;
       } else{
           rangedAttack(scavenger,player,true);
+          if(player.currentHP <1){
+              textLog.value+="\nYou have been slain. Game Over."
+              confirmActionsButton.disabled=true;
+              return;
+          }
       }
     }
 //    shoot twice
@@ -82,13 +92,33 @@ function enemyTurn(){
             roll =2;
         }else{
             rangedAttack(scavenger,player,false);
+            if(player.currentHP <1){
+                textLog.value+="\nYou have been slain. Game Over."
+                confirmActionsButton.disabled=true;
+                return;
+            }
             rangedAttack(scavenger,player,false);
+            if(player.currentHP <1){
+                textLog.value+="\nYou have been slain. Game Over."
+                confirmActionsButton.disabled=true;
+                return;
+            }
         }
     }
 //    melee twice
     if(roll === 2){
         meleeAttack(scavenger,player);
+        if(player.currentHP <1){
+           textLog.value+="\nYou have been slain. Game Over."
+            confirmActionsButton.disabled=true;
+           return;
+        }
         meleeAttack(scavenger,player);
+        if(player.currentHP <1){
+            textLog.value+="\nYou have been slain. Game Over."
+            confirmActionsButton.disabled=true;
+            return;
+        }
     }
 }
 
