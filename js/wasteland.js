@@ -18,6 +18,7 @@ var nineMil = {
     ammoLeftInMag: Math.floor(Math.random()*12),
     multiAttack: 3
 }
+
 var knife = {
     name: "Knife",
     isWeapon: true,
@@ -36,6 +37,7 @@ var knife = {
         return characterPunchGoodBonus + roll + crit;
     }
 }
+
 function statValueRoller(){
     let dTenOne = Math.ceil(Math.random()*10);
     let dTenTwo = Math.ceil(Math.random()*10);
@@ -49,11 +51,13 @@ function statValueRoller(){
         return dTenOne+dTenTwo;
     }
 }
+
 function getDistance(locationObj, destinationObj){
     //takes in objects with properties x & y
     //returns the number of spaces between them
     return Math.abs(locationObj.x - destinationObj.x) + Math.abs(locationObj.y - destinationObj.y);
 }
+
 function getLegalMoves(arrayOfAllMapSquares, characterLocationObject, characterMoveStat){
     //this will get way more complicated with walls and difficult terrain but for now it's fine
     let arrayOfSquaresThisCharacterCanMoveTo = [];
@@ -61,7 +65,7 @@ function getLegalMoves(arrayOfAllMapSquares, characterLocationObject, characterM
         if(getDistance(characterLocationObject, specificMapSquare) <= characterMoveStat && getDistance(characterLocationObject, specificMapSquare) !== 0){
             arrayOfSquaresThisCharacterCanMoveTo.push(specificMapSquare);
         }
-    })
+    });
     return arrayOfSquaresThisCharacterCanMoveTo;
 }
 
@@ -70,11 +74,13 @@ function activateMoveButton(arrayOfSquaresYouCanMoveTo){
         document.querySelector("#button" + square.x + "-" + square.y +"").style.setProperty('display','inline');
     });
 }
+
 function moveButtonClick(){
     console.log("You clicked the move button");
 
     activateMoveButton(getLegalMoves(allSquares, player.location, player.Move));
 }
+
 function moveHereClick(x, y){
    if (confirm('Are you sure you wish to move here?')){
        player.location = {
@@ -109,9 +115,14 @@ function attackButtonClick(){
 
 function renderInventory(){
     let inventoryHtml = "";
-    player.inventory.forEach(function(inventoryItem){
-        inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button><br>";
+    player.inventory.forEach(function(inventoryItem) {
+        if (inventoryItem.isWeapon && inventoryItem.ranged) {
+            inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'"> ' + inventoryItem.name + "</button><br>";
+        }else{
+            inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button><br>";
+        }
     });
+    inventoryHtml += player.ammo.nineMm.name +": "+ player.ammo.nineMm.amount +"<br>";
     return inventoryHtml;
 }
 
@@ -124,19 +135,28 @@ var player = {
     inventory: [
         nineMil,knife
     ],
+    ammo: {
+        nineMm: {
+            name: "9mm",
+            amount: 0
+            }
+    },
     punchGood: 25+statValueRoller(),
     shootGood: 25+statValueRoller(),
     Toughness: 25+statValueRoller(),
     Agility: 25+statValueRoller(),
     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
     //https://stackoverflow.com/questions/4616202/self-references-in-object-literals-initializers
-    get Move() { delete this.Move;
+    get Move() {
+        delete this.Move;
         return this.Move = Math.floor(player.Agility/10);
         },
-    get HP(){ delete this.HP;
+    get HP(){
+        delete this.HP;
         return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
         },
-    get currentHP(){ delete this.currentHP;
+    get currentHP(){
+        delete this.currentHP;
         return this.currentHP = this.HP;
     },
     get meleeDamageBonus(){
@@ -160,13 +180,16 @@ var scavenger = {
     Agility: 25+statValueRoller(),
     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
     //https://stackoverflow.com/questions/4616202/self-references-in-object-literals-initializers
-    get Move() { delete this.Move;
+    get Move() {
+        delete this.Move;
         return this.Move = Math.floor(player.Agility/10 * 2);
     },
-    get HP(){ delete this.HP;
+    get HP(){
+        delete this.HP;
         return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
     },
-    get currentHP(){ delete this.currentHP;
+    get currentHP(){
+        delete this.currentHP;
         return this.currentHP = this.HP;
     },
     get meleeDamageBonus(){
