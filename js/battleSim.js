@@ -140,12 +140,13 @@ function meleeAttack(attacker, target){
             textLog.value +="\n"+target.name+" is deceased...";
             clearActions();
             //TODO: Handle end of combat. Is it looting time? Are there additional foes?
+            endBattle(target);
             return;
         } else {
             textLog.value +="\n"+target.name+" is still standing after your attack."
         }
     }else{
-        textLog.value += "\n"+target.name+ " avoids your attack.";
+        textLog.value += "\n"+target.name+ " avoids "+ attacker.name + " attack.";
     }
     clearActions();
 }
@@ -176,18 +177,24 @@ function rangedAttack(attacker, target, aiming){
                 textLog.value +="\n"+target.name+" is deceased...";
                 clearActions();
                 //TODO: Handle end of combat. Is it looting time? Are there additional foes?
+                endBattle(target);
                 return;
             } else {
                 textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
             }
         }else{
-            textLog.value += "\n"+ attacker.name+" missed. They should aim more carefully.";
+            textLog.value += "\n"+ attacker.name+" fired at "+ target.name +" missed. They should aim more carefully.";
         }
         clearActions();
     } else{
         textLog.value += "\nClick. No cartridges left in the magazine.";
         clearActions();
     }
+}
+
+function endBattle(enemy){
+    textLog.value += "\nYou retrieve " + (enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag) + " " + enemy.ammo.nineMm.name + " rounds from the defeated " + enemy.name;
+    player.ammo.nineMm.amount += enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag;
 }
 
 clearActionsButton.addEventListener("click", clearActions);

@@ -174,6 +174,12 @@ var scavenger = {
     inventory: [
         nineMil,knife
     ],
+    ammo: {
+        nineMm: {
+            name: "9mm",
+            amount: 0
+        }
+    },
     punchGood: 25+statValueRoller(),
     shootGood: 25+statValueRoller(),
     Toughness: 25+statValueRoller(),
