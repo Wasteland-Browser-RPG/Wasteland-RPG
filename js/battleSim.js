@@ -128,7 +128,7 @@ function meleeAttack(attacker, target){
         return;
     }
     let roll = Math.floor(Math.random() * 100);
-    textLog.value += "\n"+ attacker.name +" roll " + roll + " to hit.";
+    textLog.value += "\n"+ attacker.name +" rolled " + roll + " to hit.";
     if ((attacker.punchGood) >= roll){
         let damage = attacker.inventory[1].damage(attacker.meleeDamageBonus)- Math.floor(target.Toughness/10);
         if(damage < 0){
@@ -140,12 +140,21 @@ function meleeAttack(attacker, target){
             textLog.value +="\n"+target.name+" is deceased...";
             clearActions();
             //TODO: Handle end of combat. Is it looting time? Are there additional foes?
+            endBattle(target);
             return;
         } else {
-            textLog.value +="\n"+target.name+" is still standing after your attack."
+            if(target.controlledByPlayer){
+                textLog.value += "\nYou are still standing after the" + attacker.name + "\'s attack."
+            }else{
+                textLog.value += "\n"+target.name +" is still standing after enduring your attack."
+            }
         }
     }else{
-        textLog.value += "\n"+target.name+ " avoids your attack.";
+        if(target.controlledByPlayer){
+            textLog.value += "\nYou avoid "+ attacker.name +"\'s attack.";
+        }else {
+            textLog.value += "\n" + target.name + " avoids your attack.";
+        }
     }
     clearActions();
 }
@@ -162,7 +171,7 @@ function rangedAttack(attacker, target, aiming){
     console.log(attacker.inventory[0].ammoLeftInMag);
     if(attacker.inventory[0].ammoLeftInMag > 0) {
         let roll = Math.floor(Math.random() * 100);
-        textLog.value += "\n" +attacker.name + " roll " + roll + " to hit.";
+        textLog.value += "\n" +attacker.name + " rolled " + roll + " to hit.";
         if ((attacker.shootGood + bonus) >= roll) {
             //    might want to incorporate a dodging mechanic later
             let damage = attacker.inventory[0].damage()- Math.floor(target.Toughness/10);
@@ -176,18 +185,28 @@ function rangedAttack(attacker, target, aiming){
                 textLog.value +="\n"+target.name+" is deceased...";
                 clearActions();
                 //TODO: Handle end of combat. Is it looting time? Are there additional foes?
+                endBattle(target);
                 return;
             } else {
                 textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
             }
         }else{
-            textLog.value += "\n"+ attacker.name+" missed. They should aim more carefully.";
+            if(target.controlledByPlayer){
+                textLog.value += "\n" + attacker.name + " fired at " + target.name + " and missed. You should aim more carefully.";
+            } else{
+                textLog.value += "\n" + attacker.name + " fired at you and missed. Lucky.";
+            }
         }
         clearActions();
     } else{
         textLog.value += "\nClick. No cartridges left in the magazine.";
         clearActions();
     }
+}
+
+function endBattle(enemy){
+    textLog.value += "\nYou retrieve " + (enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag) + " " + enemy.ammo.nineMm.name + " rounds from the defeated " + enemy.name;
+    player.ammo.nineMm.amount += enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag;
 }
 
 clearActionsButton.addEventListener("click", clearActions);
