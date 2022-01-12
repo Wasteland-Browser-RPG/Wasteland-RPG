@@ -109,13 +109,13 @@ function enemyTurn(){
     if(roll === 2){
         meleeAttack(scavenger,player);
         if(player.currentHP <1){
-           textLog.value+="\nYou have been slain. Game Over."
+           // textLog.value+="\nYou have been slain. Game Over."
             confirmActionsButton.disabled=true;
            return;
         }
         meleeAttack(scavenger,player);
         if(player.currentHP <1){
-            textLog.value+="\nYou have been slain. Game Over."
+            // textLog.value+="\nYou have been slain. Game Over."
             confirmActionsButton.disabled=true;
             return;
         }
@@ -137,11 +137,13 @@ function meleeAttack(attacker, target){
         textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
         target.currentHP -=damage;
         if(target.currentHP < 1){
-            textLog.value +="\n"+target.name+" is deceased...";
-            clearActions();
-            //TODO: Handle end of combat. Is it looting time? Are there additional foes?
-            endBattle(target);
-            return;
+            if(!target.controlledByPlayer){
+                enemyDead(target);
+                return;
+            }else{
+                gameOver();
+                return;
+            }
         } else {
             if(target.controlledByPlayer){
                 textLog.value += "\nYou are still standing after the" + attacker.name + "\'s attack."
@@ -182,11 +184,13 @@ function rangedAttack(attacker, target, aiming){
             attacker.inventory[0].ammoLeftInMag--;
             target.currentHP -=damage;
             if(target.currentHP < 1){
-                textLog.value +="\n"+target.name+" is deceased...";
-                clearActions();
-                //TODO: Handle end of combat. Is it looting time? Are there additional foes?
-                endBattle(target);
-                return;
+                if(!target.controlledByPlayer){
+                    enemyDead(target);
+                    return;
+                }else{
+                    gameOver();
+                    return;
+                }
             } else {
                 textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
             }
@@ -204,9 +208,20 @@ function rangedAttack(attacker, target, aiming){
     }
 }
 
+function enemyDead(target){
+    textLog.value +="\n"+target.name+" is deceased...";
+    clearActions();
+    //TODO: Handle end of combat. Is it looting time? Are there additional foes?
+    endBattle(target);
+}
+
 function endBattle(enemy){
     textLog.value += "\nYou retrieve " + (enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag) + " " + enemy.ammo.nineMm.name + " rounds from the defeated " + enemy.name;
     player.ammo.nineMm.amount += enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag;
+}
+
+function gameOver(){
+    textLog.value+="\nGAME OVER.\n\nRefresh the page to play again."
 }
 
 clearActionsButton.addEventListener("click", clearActions);
