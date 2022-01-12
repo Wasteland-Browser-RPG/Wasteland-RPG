@@ -194,11 +194,11 @@ function rangedAttack(attacker, target, aiming){
             } else {
                 textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
             }
-        }else{
+        }else{ //miss case
             if(target.controlledByPlayer){
-                textLog.value += "\n" + attacker.name + " fired at " + target.name + " and missed. You should aim more carefully.";
-            } else{
                 textLog.value += "\n" + attacker.name + " fired at you and missed. Lucky.";
+            } else{
+                textLog.value += "\n" + attacker.name + " fired at " + target.name + " and missed. You should aim more carefully.";
             }
         }
         clearActions();
@@ -211,6 +211,7 @@ function rangedAttack(attacker, target, aiming){
 function enemyDead(target){
     textLog.value +="\n"+target.name+" is deceased...";
     clearActions();
+    player.gainExperience(100);
     //TODO: Handle end of combat. Is it looting time? Are there additional foes?
     endBattle(target);
 }
