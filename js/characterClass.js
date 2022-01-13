@@ -18,6 +18,7 @@ class character {
         this.meleeDamageBonus = Math.floor(this.punchGood / 10);
         this.experiencePoints=0;
         this.level=1;
+        this.dodgedThisRound=false;
     }
     getMoveDistance() {
         return this.moveDistance;

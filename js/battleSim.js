@@ -55,9 +55,10 @@ function confirmActions(){
        }
         if (action=="Melee Attack"){
             //TODO: use meeleeAttack Function
-            meleeAttack(player, scavenger, aiming);
+            meleeAttack(player, scavenger);
         }
     });
+    scavenger.dodgedThisRound=false;
     if(scavenger.currentHP > 0){
         enemyTurn();
     }
@@ -120,6 +121,7 @@ function enemyTurn(){
             return;
         }
     }
+    player.dodgedThisRound=false;
 }
 
 function meleeAttack(attacker, target){
@@ -128,34 +130,47 @@ function meleeAttack(attacker, target){
         return;
     }
     let roll = Math.floor(Math.random() * 100);
-    textLog.value += "\n"+ attacker.name +" rolled " + roll + " to hit.";
+    textLog.value += "\n"+ attacker.name +" rolled " + roll + " versus "+ attacker.punchGood +" to hit.";
     if ((attacker.punchGood) >= roll){
-        let damage = attacker.inventory[1].damage(attacker.meleeDamageBonus)- Math.floor(target.Toughness/10);
-        if(damage < 0){
-            damage= 0;
-        }
-        textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
-        target.currentHP -=damage;
-        if(target.currentHP < 1){
-            if(!target.controlledByPlayer){
-                enemyDead(target);
-                return;
-            }else{
-                gameOver();
-                return;
-            }
-        } else {
+        if(!target.dodgedThisRound){
             if(target.controlledByPlayer){
-                textLog.value += "\nYou are still standing after the" + attacker.name + "\'s attack."
+                textLog.value+="\nYou attempt to dodge the attack!"
             }else{
-                textLog.value += "\n"+target.name +" is still standing after enduring your attack."
+                textLog.value+="\n"+target.name +" attempts to dodge your attack!"
             }
         }
-    }else{
+        if(target.Agility < (Math.floor(Math.random() * 100))|| target.dodgedThisRound){//hit case
+            target.dodgedThisRound = true;
+            let damage = attacker.inventory[1].damage(attacker.meleeDamageBonus) - Math.floor(target.Toughness / 10);
+            if (damage < 0) {
+                damage = 0;
+            }
+            textLog.value += "\n" + attacker.name + " hit " + target.name + " for " + damage + " damage";
+            target.currentHP -= damage;
+            if (target.currentHP < 1) {
+                if (!target.controlledByPlayer) {
+                    enemyDead(target);
+                    return;
+                } else {
+                    gameOver();
+                    return;
+                }
+            } else {
+                if (target.controlledByPlayer) {
+                    textLog.value += "\nYou are still standing after the" + attacker.name + "\'s attack."
+                } else {
+                    textLog.value += "\n" + target.name + " is still standing after enduring your attack."
+                }
+            }
+        }else{//successful dodge case
+            textLog.value+="\n"+target.name + " nimbly dodged the otherwise accurate attack."
+            target.dodgedThisRound = true;
+        }
+    }else{//miss case
         if(target.controlledByPlayer){
-            textLog.value += "\nYou avoid "+ attacker.name +"\'s attack.";
+            textLog.value += "\n"+ attacker.name +"\'s attack misses you.";
         }else {
-            textLog.value += "\n" + target.name + " avoids your attack.";
+            textLog.value += "\nYour attack misses.";
         }
     }
     clearActions();
@@ -175,24 +190,36 @@ function rangedAttack(attacker, target, aiming){
         let roll = Math.floor(Math.random() * 100);
         textLog.value += "\n" +attacker.name + " rolled " + roll + " to hit.";
         if ((attacker.shootGood + bonus) >= roll) {
-            //    might want to incorporate a dodging mechanic later
-            let damage = attacker.inventory[0].damage()- Math.floor(target.Toughness/10);
-            if(damage < 0){
-                damage= 0;
-            }
-            textLog.value +="\n"+ attacker.name + " hit " + target.name + " for "+damage +" damage";
-            attacker.inventory[0].ammoLeftInMag--;
-            target.currentHP -=damage;
-            if(target.currentHP < 1){
-                if(!target.controlledByPlayer){
-                    enemyDead(target);
-                    return;
+            if(!target.dodgedThisRound){
+                if(target.controlledByPlayer){
+                    textLog.value+="\nYou attempt to dodge the attack!"
                 }else{
-                    gameOver();
-                    return;
+                    textLog.value+="\n"+target.name +" attempts to dodge your attack!"
                 }
-            } else {
-                textLog.value +="\n"+target.name+" didn't like getting shot. Imagine that."
+            }
+            if(target.Agility < (Math.floor(Math.random() * 100))|| target.dodgedThisRound) {//hit case
+                target.dodgedThisRound=true;
+                let damage = attacker.inventory[0].damage() - Math.floor(target.Toughness / 10);
+                if (damage < 0) {
+                    damage = 0;
+                }
+                textLog.value += "\n" + attacker.name + " hit " + target.name + " for " + damage + " damage";
+                attacker.inventory[0].ammoLeftInMag--;
+                target.currentHP -= damage;
+                if (target.currentHP < 1) {
+                    if (!target.controlledByPlayer) {
+                        enemyDead(target);
+                        return;
+                    } else {
+                        gameOver();
+                        return;
+                    }
+                } else {
+                    textLog.value += "\n" + target.name + " didn't like getting shot. Imagine that."
+                }
+            }else{//successful dodge case
+                textLog.value+="\n"+target.name + " nimbly dodged the otherwise accurate attack."
+                target.dodgedThisRound = true;
             }
         }else{ //miss case
             if(target.controlledByPlayer){
