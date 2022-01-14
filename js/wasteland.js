@@ -1,3 +1,5 @@
+//todo: Make the nineMil a class, because currently the player and scavenger SHARE THE EXACT SAME GUN
+//Scavenger's gun has the same # of rounds in it as the players because they are THE SAME
 var nineMil = {
     name: "9mm Pistol",
     info(){
