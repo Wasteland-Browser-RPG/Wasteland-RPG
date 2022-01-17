@@ -1,25 +1,25 @@
 //todo: Make the nineMil a class, because currently the player and scavenger SHARE THE EXACT SAME GUN
 //Scavenger's gun has the same # of rounds in it as the players because they are THE SAME
-var nineMil = {
-    name: "9mm Pistol",
-    info(){
-        //code to put item info in log-text-area for players to read
-    },
-    isWeapon: true,
-    ranged: true,
-    magSize: 12,
-    damage (){
-        let crit = 0;
-        let roll = Math.floor(Math.random()*10);
-        if(roll ===10){
-            crit = Math.floor(Math.random()*6);
-            textLog.value += "\nA critical hit!";
-        }
-        return 1 + roll + crit;
-    },
-    ammoLeftInMag: Math.floor(Math.random()*12),
-    multiAttack: 3
-}
+// var nineMil = {
+//     name: "9mm Pistol",
+//     info(){
+//         //code to put item info in log-text-area for players to read
+//     },
+//     isWeapon: true,
+//     ranged: true,
+//     magSize: 12,
+//     damage (){
+//         let crit = 0;
+//         let roll = Math.floor(Math.random()*10);
+//         if(roll ===10){
+//             crit = Math.floor(Math.random()*6);
+//             textLog.value += "\nA critical hit!";
+//         }
+//         return 1 + roll + crit;
+//     },
+//     ammoLeftInMag: Math.floor(Math.random()*12),
+//     multiAttack: 3
+// }
 
 var knife = {
     name: "Knife",
@@ -169,7 +169,7 @@ function renderInventory(){
 var player = new character
     ("You",
     {x:1, y:1},
-    [nineMil,knife],
+    [new nineMil(0),knife],
         {
                 nineMm: {
                     name: "9mm",
@@ -182,7 +182,7 @@ true
 var scavenger = new character
 ("Scavenger",
     {x:3, y:1},
-    [nineMil,knife],
+    [new nineMil(0),knife],
     {
         nineMm: {
             name: "9mm",
@@ -233,6 +233,18 @@ var scavenger = new character
 // }
 
 var charactersArray = [player,scavenger];
+
+var levelTwoFoes = [new character("Scavenger",
+    {x:3, y:1},
+    [nineMil,knife],
+    {
+        nineMm: {
+            name: "9mm",
+            amount: 0
+        }
+    },
+    false
+)];
 
 console.log(player.HP);
 console.log(player.currentHP);
