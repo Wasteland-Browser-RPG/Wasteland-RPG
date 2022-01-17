@@ -69,6 +69,7 @@ function confirmActions(){
     scavenger.dodgedThisRound=false;
     if(scavenger.currentHP > 0){
         enemyTurn();
+        aimButton.disabled=false;
     }
 }
 
