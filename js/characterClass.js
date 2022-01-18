@@ -19,6 +19,7 @@ class character {
         this.experiencePoints=0;
         this.level=1;
         this.dodgedThisRound=false;
+        this.equippedRangedWeapon= this.inventory[0];
     }
     getMoveDistance() {
         return this.moveDistance;
@@ -29,6 +30,14 @@ class character {
 
     getMeleeDamageBonus() {
         return this.meleeDamageBonus;
+    }
+    rangedEquip(weaponName){
+        this.inventory.forEach((item)=>{
+            if (item.name === weaponName){
+                this.equippedRangedWeapon=item;
+                return;
+            }
+        });
     }
     gainExperience(expGain){
         this.experiencePoints += expGain;

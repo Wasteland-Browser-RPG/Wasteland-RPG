@@ -119,7 +119,7 @@ function renderInventory(){
     let inventoryHtml = "";
     player.inventory.forEach(function(inventoryItem) {
         if (inventoryItem.isWeapon && inventoryItem.ranged) {
-            inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'"> ' + inventoryItem.name + "</button><br>";
+            inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'" onclick="player.rangedEquip('+ inventoryItem.name +')"> ' + inventoryItem.name + "</button><br>";
         }else{
             inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button><br>";
         }
@@ -128,44 +128,6 @@ function renderInventory(){
     return inventoryHtml;
 }
 
-// var player = {
-//     name: "You",
-//     location: {
-//         x: 1,
-//         y: 1
-//     },
-//     inventory: [
-//         nineMil,knife
-//     ],
-//     ammo: {
-//         nineMm: {
-//             name: "9mm",
-//             amount: 0
-//             }
-//     },
-//     punchGood: 25+statValueRoller(),
-//     shootGood: 25+statValueRoller(),
-//     Toughness: 25+statValueRoller(),
-//     Agility: 25+statValueRoller(),
-//     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
-//     //https://stackoverflow.com/questions/4616202/self-references-in-object-literals-initializers
-//     get Move() {
-//         delete this.Move;
-//         return this.Move = Math.floor(player.Agility/10);
-//         },
-//     get HP(){
-//         delete this.HP;
-//         return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
-//         },
-//     get currentHP(){
-//         delete this.currentHP;
-//         return this.currentHP = this.HP;
-//     },
-//     get meleeDamageBonus(){
-//         delete this.meleeDamageBonus;
-//         return this. meleeDamageBonus = Math.floor(player.punchGood/10);
-//     }
-// }
 var player = new character
     ("You",
     {x:1, y:1},
@@ -192,45 +154,6 @@ var scavenger = new character
     false
 );
 
-// var scavenger = {
-//     name: "Scavenger",
-//     location: {
-//         x: 3,
-//         y: 1
-//     },
-//     inventory: [
-//         nineMil,knife
-//     ],
-//     ammo: {
-//         nineMm: {
-//             name: "9mm",
-//             amount: 0
-//         }
-//     },
-//     controlledByPlayer: false,
-//     punchGood: 25+statValueRoller(),
-//     shootGood: 25+statValueRoller(),
-//     Toughness: 25+statValueRoller(),
-//     Agility: 25+statValueRoller(),
-//     //setting an object property in it's instantiation to be based on another property doesn't work so we gotta make a getter function
-//     //https://stackoverflow.com/questions/4616202/self-references-in-object-literals-initializers
-//     get Move() {
-//         delete this.Move;
-//         return this.Move = Math.floor(player.Agility/10 * 2);
-//     },
-//     get HP(){
-//         delete this.HP;
-//         return this.HP = Math.floor(player.Toughness/10) + Math.floor(Math.random()*10) + Math.floor(Math.random()*10);
-//     },
-//     get currentHP(){
-//         delete this.currentHP;
-//         return this.currentHP = this.HP;
-//     },
-//     get meleeDamageBonus(){
-//         delete this.meleeDamageBonus;
-//         return this. meleeDamageBonus = Math.floor(player.punchGood/10);
-//     }
-// }
 
 var charactersArray = [player,scavenger];
 
