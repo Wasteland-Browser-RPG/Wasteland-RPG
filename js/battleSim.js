@@ -54,7 +54,7 @@ function confirmActions(){
            }
         }
         if (action=="Ranged Multi Attack"){
-            rangedAttack(player, scavenger, aiming, player.inventory[0].multiAttack);
+            rangedAttack(player, scavenger, aiming, player.equippedRangedWeapon.multiAttack);
             if(scavenger.currentHP <1){
                 textLog.value+="\nWell, the fighting is over. You might as well check the body and scavenge around a bit before moving on."
                 //Call to function for what happens after defeating foe
@@ -67,6 +67,7 @@ function confirmActions(){
         }
     });
     scavenger.dodgedThisRound=false;
+    inventoryDiv.innerHTML=renderInventory();
     if(scavenger.currentHP > 0){
         enemyTurn();
         aimButton.disabled=false;
@@ -235,10 +236,10 @@ function rangedAttack(attacker, target, aiming, shots){
     if(shots > 1){
         penalty = 10;
     }
-    console.log(attacker.inventory[0].ammoLeftInMag);
+    console.log(attacker.equippedRangedWeapon.ammoLeftInMag);
     for(let i = 0; i < shots; i++) {
-        if (attacker.inventory[0].ammoLeftInMag > 0) {
-            attacker.inventory[0].ammoLeftInMag--;
+        if (attacker.equippedRangedWeapon.ammoLeftInMag > 0) {
+            attacker.equippedRangedWeapon.ammoLeftInMag--;
             let roll = Math.floor(Math.random() * 100);
             textLog.value += "\n" + attacker.name + " rolled " + roll + " against a "+ (attacker.shootGood+bonus-penalty) + " to hit.";
             if ((attacker.shootGood + bonus - penalty) >= roll) {
@@ -251,7 +252,7 @@ function rangedAttack(attacker, target, aiming, shots){
                 }
                 if (target.Agility < (Math.floor(Math.random() * 100)) || target.dodgedThisRound) {//hit case
                     // target.dodgedThisRound = true;
-                    let damage = attacker.inventory[0].damage() - Math.floor(target.Toughness / 10);
+                    let damage = attacker.equippedRangedWeapon.damage() - Math.floor(target.Toughness / 10);
                     if (damage < 0) {
                         damage = 0;
                     }

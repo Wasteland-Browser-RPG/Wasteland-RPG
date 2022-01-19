@@ -119,22 +119,27 @@ function renderInventory(){
     let inventoryHtml = "";
     player.inventory.forEach(function(inventoryItem) {
         if (inventoryItem.isWeapon && inventoryItem.ranged) {
-            inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'" onclick="player.rangedEquip('+ inventoryItem.name +')"> ' + inventoryItem.name + "</button><br>";
+            inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'" onclick="player.rangedEquip(\''+ inventoryItem.name +'\')"> ' + inventoryItem.name + "</button><br>";
         }else{
             inventoryHtml += '<button id="' + inventoryItem.name + 'Button"> ' + inventoryItem.name + "</button><br>";
         }
     });
     inventoryHtml += player.ammo.nineMm.name +": "+ player.ammo.nineMm.amount +"<br>";
+    inventoryHtml += player.ammo.desertEagle.name +": "+ player.ammo.desertEagle.amount +"<br>";
     return inventoryHtml;
 }
 
 var player = new character
     ("You",
     {x:1, y:1},
-    [new nineMil(0),knife],
+    [new nineMil(0),knife, new desertEagle45(0)],
         {
                 nineMm: {
                     name: "9mm",
+                    amount: 0
+                    },
+                desertEagle: {
+                    name: ".45",
                     amount: 0
                     }
                 },
