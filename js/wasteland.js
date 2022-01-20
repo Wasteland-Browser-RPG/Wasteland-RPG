@@ -116,7 +116,7 @@ function attackButtonClick(){
 }
 
 function renderInventory(){
-    let inventoryHtml = "";
+    let inventoryHtml = "<div>Inventory</div>";
     player.inventory.forEach(function(inventoryItem) {
         if (inventoryItem.isWeapon && inventoryItem.ranged) {
             inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'" onclick="player.rangedEquip(\''+ inventoryItem.name +'\')"> ' + inventoryItem.name + "</button><br>";
@@ -223,6 +223,23 @@ var aimButton = document.getElementById('aimButton');
 var clearActionsButton = document.getElementById("clearActions");
 var confirmActionsButton = document.getElementById("confirmActions");
 var inventoryDiv = document.getElementById('inventory');
+
+
+//scenario/level
+var currentScenario = new scenario([new character
+("Scavenger",
+    {x:3, y:1},
+    [new nineMil(0),knife],
+    {
+        nineMm: {
+            name: "9mm",
+            amount: 0
+        }
+    },
+    false
+)],
+    '\nAs you are scavenging in a dilapidated corner store a hostile scavenger bursts in, sees you and attacks.',
+    '\nStuff that happens when this level is over.');
 
 
 moveButton.addEventListener("click", moveButtonClick);
