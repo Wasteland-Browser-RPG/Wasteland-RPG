@@ -225,23 +225,9 @@ var confirmActionsButton = document.getElementById("confirmActions");
 var inventoryDiv = document.getElementById('inventory');
 
 
-//scenario/level
-var currentScenario = new scenario([new character
-("Scavenger",
-    {x:3, y:1},
-    [new nineMil(0),knife],
-    {
-        nineMm: {
-            name: "9mm",
-            amount: 0
-        }
-    },
-    false
-)],
-    '\nAs you are scavenging in a dilapidated corner store a hostile scavenger bursts in, sees you and attacks.',
-    '\nStuff that happens when this level is over.');
-
-
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
 inventoryDiv.innerHTML= renderInventory();
+
+//This triggers the text for the first level
+beginScenario();

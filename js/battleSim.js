@@ -1,5 +1,9 @@
 // textLog.value += '\nAs you are scavenging in a dilapidated corner store a hostile scavenger bursts in, sees you and attacks.';
 
+function beginScenario(){
+    textLog.value+= currentScenario.encounterIntroText;
+}
+
 if (player.currentHP>0 && scavenger.currentHP >0){
     textLog.value += "\nYou have 2 actions, what will you do?";
 }
@@ -46,16 +50,16 @@ function confirmActions(){
     //    in this case, currently, the only other action should be a ranged attack but we will still check
     playerQueuedActions.forEach(function (action){
         if (action=="Ranged Single Attack"){
-           rangedAttack(player, scavenger, aiming, 1);
-           if(scavenger.currentHP <1){
+           rangedAttack(player, currentScenario.enemies[0], aiming, 1);
+           if(currentScenario.enemies[0].currentHP <1){
                textLog.value+="\nWell, the fighting is over. You might as well check the body and scavenge around a bit before moving on."
                //Call to function for what happens after defeating foe
                return;
            }
         }
         if (action=="Ranged Multi Attack"){
-            rangedAttack(player, scavenger, aiming, player.equippedRangedWeapon.multiAttack);
-            if(scavenger.currentHP <1){
+            rangedAttack(player, currentScenario.enemies[0], aiming, player.equippedRangedWeapon.multiAttack);
+            if(currentScenario.enemies[0].currentHP <1){
                 textLog.value+="\nWell, the fighting is over. You might as well check the body and scavenge around a bit before moving on."
                 //Call to function for what happens after defeating foe
                 return;
@@ -63,12 +67,12 @@ function confirmActions(){
         }
         if (action=="Melee Attack"){
             //TODO: use meeleeAttack Function
-            meleeAttack(player, scavenger);
+            meleeAttack(player, currentScenario.enemies[0]);
         }
     });
-    scavenger.dodgedThisRound=false;
+    currentScenario.enemies[0].dodgedThisRound=false;
     inventoryDiv.innerHTML=renderInventory();
-    if(scavenger.currentHP > 0){
+    if(currentScenario.enemies[0].currentHP > 0){
         enemyTurn();
         aimButton.disabled=false;
     }
@@ -86,20 +90,20 @@ function enemyTurn(){
 
 //    aim and shoot
     if(roll === 0){
-      if(scavenger.inventory[0].ammoLeftInMag < 1){
+      if(currentScenario.enemies[0].inventory[0].ammoLeftInMag < 1){
           roll = 2;
       } else{
           let singleOrMultiShotRoll = Math.floor(Math.random() * 2);
           console.log(singleOrMultiShotRoll);
           if(singleOrMultiShotRoll==0){
-              rangedAttack(scavenger, player, true, 1);
+              rangedAttack(currentScenario.enemies[0], player, true, 1);
               if (player.currentHP < 1) {
                   textLog.value += "\nYou have been slain. Game Over."
                   confirmActionsButton.disabled = true;
                   return;
               }
           } else{
-              rangedAttack(scavenger, player, true, scavenger.inventory[0].multiAttack);
+              rangedAttack(currentScenario.enemies[0], player, true, currentScenario.enemies[0].inventory[0].multiAttack);
               if (player.currentHP < 1) {
                   textLog.value += "\nYou have been slain. Game Over."
                   confirmActionsButton.disabled = true;
@@ -110,40 +114,40 @@ function enemyTurn(){
     }
 //    shoot twice
     if(roll === 1) {
-        if (scavenger.inventory[0].ammoLeftInMag < 1) {
+        if (currentScenario.enemies[0].inventory[0].ammoLeftInMag < 1) {
             roll = 2;
         } else {
             let singleOrMultiShotRoll = Math.floor(Math.random() * 2);
             console.log(singleOrMultiShotRoll)
             if (singleOrMultiShotRoll == 0) {
-                rangedAttack(scavenger, player, false, 1);
+                rangedAttack(currentScenario.enemies[0], player, false, 1);
                 if (player.currentHP < 1) {
                     textLog.value += "\nYou have been slain. Game Over."
                     confirmActionsButton.disabled = true;
                     return;
                 }
-                rangedAttack(scavenger, player, false, 1);
+                rangedAttack(currentScenario.enemies[0], player, false, 1);
                 if (player.currentHP < 1) {
                     textLog.value += "\nYou have been slain. Game Over."
                     confirmActionsButton.disabled = true;
                     return;
                 }
             } else {
-                rangedAttack(scavenger, player, false, scavenger.inventory[0].multiAttack);
+                rangedAttack(currentScenario.enemies[0], player, false, currentScenario.enemies[0].inventory[0].multiAttack);
                 if (player.currentHP < 1) {
                     textLog.value += "\nYou have been slain. Game Over."
                     confirmActionsButton.disabled = true;
                     return;
                 }
-                if (scavenger.inventory[0].ammoLeftInMag > 0) {
-                    rangedAttack(scavenger, player, false, scavenger.inventory[0].multiAttack);
+                if (currentScenario.enemies[0].inventory[0].ammoLeftInMag > 0) {
+                    rangedAttack(currentScenario.enemies[0], player, false, currentScenario.enemies[0].inventory[0].multiAttack);
                     if (player.currentHP < 1) {
                         textLog.value += "\nYou have been slain. Game Over."
                         confirmActionsButton.disabled = true;
                         return;
                     }
                 } else {
-                    meleeAttack(scavenger, player);
+                    meleeAttack(currentScenario.enemies[0], player);
                     if (player.currentHP < 1) {
                         // textLog.value+="\nYou have been slain. Game Over."
                         confirmActionsButton.disabled = true;
@@ -155,13 +159,13 @@ function enemyTurn(){
     }
 //    melee twice
     if(roll === 2){
-        meleeAttack(scavenger,player);
+        meleeAttack(currentScenario.enemies[0],player);
         if(player.currentHP <1){
            // textLog.value+="\nYou have been slain. Game Over."
             confirmActionsButton.disabled=true;
            return;
         }
-        meleeAttack(scavenger,player);
+        meleeAttack(currentScenario.enemies[0],player);
         if(player.currentHP <1){
             // textLog.value+="\nYou have been slain. Game Over."
             confirmActionsButton.disabled=true;
@@ -300,6 +304,10 @@ function enemyDead(target){
 function endBattle(enemy){
     textLog.value += "\nYou retrieve " + (enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag) + " " + enemy.ammo.nineMm.name + " rounds from the defeated " + enemy.name;
     player.ammo.nineMm.amount += enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag;
+
+    textLog.value+= currentScenario.encounterConclusionText;
+    progressToNextScenario();
+    beginScenario();
 }
 
 function gameOver(){
