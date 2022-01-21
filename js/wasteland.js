@@ -116,7 +116,7 @@ function attackButtonClick(){
 }
 
 function renderInventory(){
-    let inventoryHtml = "";
+    let inventoryHtml = "<div>Inventory</div>";
     player.inventory.forEach(function(inventoryItem) {
         if (inventoryItem.isWeapon && inventoryItem.ranged) {
             inventoryHtml += '<button id="' + inventoryItem.name + 'Button" title="In clip: '+ inventoryItem.ammoLeftInMag+'" onclick="player.rangedEquip(\''+ inventoryItem.name +'\')"> ' + inventoryItem.name + "</button><br>";
@@ -228,3 +228,6 @@ var inventoryDiv = document.getElementById('inventory');
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
 inventoryDiv.innerHTML= renderInventory();
+
+//This triggers the text for the first level
+beginScenario();
