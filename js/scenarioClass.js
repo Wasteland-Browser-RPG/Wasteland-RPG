@@ -1,6 +1,6 @@
 'use strict';
 class scenario{
-    scenario(enemies, encounterIntroText, encounterConclusionText){
+    constructor(enemies, encounterIntroText, encounterConclusionText){
         this.enemies = enemies;
         this.encounterIntroText=encounterIntroText;
         this.encounterConclusionText=encounterConclusionText;
@@ -50,6 +50,10 @@ var scenarioSequence = [scenarioOne,scenarioTwo];
 //scenario/level
 var scenarioIterator = 0;
 var currentScenario = scenarioSequence[scenarioIterator];
+
+function beginScenario(){
+    textLog.value+= currentScenario.encounterIntroText;
+}
 
 function progressToNextScenario(){
     scenarioIterator++;

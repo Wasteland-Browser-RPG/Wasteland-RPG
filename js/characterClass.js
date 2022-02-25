@@ -1,4 +1,18 @@
 'use strict';
+function statValueRoller(){
+    let dTenOne = Math.ceil(Math.random()*10);
+    let dTenTwo = Math.ceil(Math.random()*10);
+    let dTenThree = Math.ceil(Math.random()*10);
+    console.log(dTenOne + " " + dTenTwo + " " + dTenThree);
+    if(dTenOne <= dTenTwo && dTenOne <= dTenThree){
+        return dTenTwo+dTenThree;
+    } else if (dTenTwo <= dTenThree && dTenTwo <= dTenOne){
+        return dTenOne+dTenThree;
+    } else {
+        return dTenOne+dTenTwo;
+    }
+}
+
 var levelUpPrompt = document.getElementById("levelUpPrompt");
 
 class character {
@@ -99,6 +113,23 @@ class character {
     }
 }
 
+var player = new character
+("You",
+    {x:1, y:1},
+    [new nineMil(0),knife, new desertEagle45(0)],
+    {
+        nineMm: {
+            name: "9mm",
+            amount: 0
+        },
+        desertEagle: {
+            name: ".45",
+            amount: 0
+        }
+    },
+    true
+);
+
 function levelUpStatImprovement(e){
     let statToImprove = statImprovementSelection(e)
     switch(statToImprove) {
@@ -130,3 +161,21 @@ function statImprovementSelection(e){
     console.log(checkedOption);
     return checkedOption.value;
 }
+
+
+
+var scavenger = new character
+("Scavenger",
+    {x:3, y:1},
+    [new nineMil(0),knife],
+    {
+        nineMm: {
+            name: "9mm",
+            amount: 0
+        }
+    },
+    false
+);
+
+
+var charactersArray = [player,scavenger];

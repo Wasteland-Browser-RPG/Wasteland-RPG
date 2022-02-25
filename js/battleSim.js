@@ -1,9 +1,5 @@
 // textLog.value += '\nAs you are scavenging in a dilapidated corner store a hostile scavenger bursts in, sees you and attacks.';
 
-function beginScenario(){
-    textLog.value+= currentScenario.encounterIntroText;
-}
-
 if (player.currentHP>0 && scavenger.currentHP >0){
     textLog.value += "\nYou have 2 actions, what will you do?";
 }
