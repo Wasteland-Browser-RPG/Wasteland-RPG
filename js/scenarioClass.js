@@ -1,15 +1,21 @@
 'use strict';
 class scenario{
-    scenario(enemies, encounterIntroText, encounterConclusionText){
+    constructor(enemies, encounterIntroText, encounterConclusionText,loot){
         this.enemies = enemies;
         this.encounterIntroText=encounterIntroText;
         this.encounterConclusionText=encounterConclusionText;
+        this.loot=loot;
     }
     commence(){
         textLog.value+='\n'+ this.encounterIntroText;
     }
     conclude(){
         textLog.value+='\n' + this.encounterConclusionText;
+        if(this.loot != undefined){
+            console.log("should be adding to inventory");
+            player.inventory.push(this.loot);
+            inventoryDiv.innerHTML=renderInventory();
+        }
     }
 }
 
@@ -28,7 +34,8 @@ var scenarioOne = new scenario([new character
         false
     )],
     '\nAs you are scavenging in a dilapidated corner store a hostile scavenger bursts in, sees you and attacks.',
-    '\nStuff that happens when this level is over.');
+    '\nStuff that happens when this level is over.',
+    new desertEagle45(0));
 
 var scenarioTwo = new scenario([new character
     ("Scavenger",
@@ -50,6 +57,10 @@ var scenarioSequence = [scenarioOne,scenarioTwo];
 //scenario/level
 var scenarioIterator = 0;
 var currentScenario = scenarioSequence[scenarioIterator];
+
+function beginScenario(){
+    textLog.value+= currentScenario.encounterIntroText;
+}
 
 function progressToNextScenario(){
     scenarioIterator++;

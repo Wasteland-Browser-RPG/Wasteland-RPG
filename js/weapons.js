@@ -53,3 +53,22 @@ class desertEagle45{
         return 6 + roll + crit;
     }
 }
+
+var knife = {
+    name: "Knife",
+    isWeapon: true,
+    ranged: false,
+    info (){
+        //code to put item info in log-text-area for players to read
+    },
+    damage(characterPunchGoodBonus){
+        let crit = 0;
+        let roll = Math.floor(Math.random()*10)
+        if(roll ===10){
+            crit = Math.floor(Math.random()*6);
+            //TODO log damage and when there's a crit. Maybe that can go with the call?
+            textLog.value += "\nA critical hit!";
+        }
+        return characterPunchGoodBonus + roll + crit;
+    }
+}

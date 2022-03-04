@@ -21,39 +21,6 @@
 //     multiAttack: 3
 // }
 
-var knife = {
-    name: "Knife",
-    isWeapon: true,
-    ranged: false,
-    info (){
-        //code to put item info in log-text-area for players to read
-    },
-    damage(characterPunchGoodBonus){
-        let crit = 0;
-        let roll = Math.floor(Math.random()*10)
-        if(roll ===10){
-            crit = Math.floor(Math.random()*6);
-            //TODO log damage and when there's a crit. Maybe that can go with the call?
-            textLog.value += "\nA critical hit!";
-        }
-        return characterPunchGoodBonus + roll + crit;
-    }
-}
-
-function statValueRoller(){
-    let dTenOne = Math.ceil(Math.random()*10);
-    let dTenTwo = Math.ceil(Math.random()*10);
-    let dTenThree = Math.ceil(Math.random()*10);
-    console.log(dTenOne + " " + dTenTwo + " " + dTenThree);
-    if(dTenOne <= dTenTwo && dTenOne <= dTenThree){
-        return dTenTwo+dTenThree;
-    } else if (dTenTwo <= dTenThree && dTenTwo <= dTenOne){
-        return dTenOne+dTenThree;
-    } else {
-        return dTenOne+dTenTwo;
-    }
-}
-
 function getDistance(locationObj, destinationObj){
     //takes in objects with properties x & y
     //returns the number of spaces between them
@@ -128,39 +95,6 @@ function renderInventory(){
     inventoryHtml += player.ammo.desertEagle.name +": "+ player.ammo.desertEagle.amount +"<br>";
     return inventoryHtml;
 }
-
-var player = new character
-    ("You",
-    {x:1, y:1},
-    [new nineMil(0),knife, new desertEagle45(0)],
-        {
-                nineMm: {
-                    name: "9mm",
-                    amount: 0
-                    },
-                desertEagle: {
-                    name: ".45",
-                    amount: 0
-                    }
-                },
-true
-    );
-
-var scavenger = new character
-("Scavenger",
-    {x:3, y:1},
-    [new nineMil(0),knife],
-    {
-        nineMm: {
-            name: "9mm",
-            amount: 0
-        }
-    },
-    false
-);
-
-
-var charactersArray = [player,scavenger];
 
 var levelTwoFoes = [new character("Scavenger",
     {x:3, y:1},
