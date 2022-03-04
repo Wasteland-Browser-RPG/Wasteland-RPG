@@ -302,6 +302,7 @@ function endBattle(enemy){
     player.ammo.nineMm.amount += enemy.ammo.nineMm.amount + enemy.inventory[0].ammoLeftInMag;
 
     textLog.value+= currentScenario.encounterConclusionText;
+    currentScenario.conclude();
     progressToNextScenario();
     beginScenario();
 }

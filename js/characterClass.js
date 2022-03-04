@@ -116,7 +116,7 @@ class character {
 var player = new character
 ("You",
     {x:1, y:1},
-    [new nineMil(0),knife, new desertEagle45(0)],
+    [new nineMil(0),knife],
     {
         nineMm: {
             name: "9mm",
