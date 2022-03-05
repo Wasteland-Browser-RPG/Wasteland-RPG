@@ -64,6 +64,11 @@ function confirmActions(){
         if (action=="Melee Attack"){
             //TODO: use meeleeAttack Function
             meleeAttack(player, currentScenario.enemies[0]);
+            if(currentScenario.enemies[0].currentHP <1){
+                textLog.value+="\nWell, the fighting is over. You might as well check the body and scavenge around a bit before moving on."
+                //Call to function for what happens after defeating foe
+                return;
+            }
         }
     });
     currentScenario.enemies[0].dodgedThisRound=false;
@@ -194,6 +199,9 @@ function meleeAttack(attacker, target){
             }
             textLog.value += "\n" + attacker.name + " hit " + target.name + " for " + damage + " damage";
             target.currentHP -= damage;
+            if(target.controlledByPlayer){
+                updateHPDisplay();
+            }
             if (target.currentHP < 1) {
                 if (!target.controlledByPlayer) {
                     enemyDead(target);
@@ -258,6 +266,9 @@ function rangedAttack(attacker, target, aiming, shots){
                     }
                     textLog.value += "\n" + attacker.name + " hit " + target.name + " for " + damage + " damage";
                     target.currentHP -= damage;
+                    if(target.controlledByPlayer){
+                        updateHPDisplay();
+                    }
                     if (target.currentHP < 1) {
                         if (!target.controlledByPlayer) {
                             enemyDead(target);

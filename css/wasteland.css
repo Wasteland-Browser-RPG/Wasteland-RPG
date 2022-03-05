@@ -16,6 +16,9 @@ body{
     width: 10rem;
     height: 36rem;
 }
+#playerHP{
+    width: 10rem;
+}
 #action-queue{
     color: white;
 }
