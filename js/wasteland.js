@@ -157,7 +157,14 @@ var aimButton = document.getElementById('aimButton');
 var clearActionsButton = document.getElementById("clearActions");
 var confirmActionsButton = document.getElementById("confirmActions");
 var inventoryDiv = document.getElementById('inventory');
+var hpDisplay = document.getElementById('playerHP');
 
+
+
+function updateHPDisplay(){
+    hpDisplay.innerText = 'HP: '+player.hitPoints + '/' + player.currentHP;
+}
+updateHPDisplay();
 
 moveButton.addEventListener("click", moveButtonClick);
 attackButton.addEventListener("click", attackButtonClick);
